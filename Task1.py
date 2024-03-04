@@ -21,6 +21,7 @@ def input_error(func):
 
 class PhoneError(Exception):
     pass
+
 class NameError(Exception):
     pass
 
