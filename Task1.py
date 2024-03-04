@@ -12,13 +12,31 @@ def input_error(func):
         except KeyError:
             return "Contact not found."
         except IndexError:
-            return "Enter user name."
-        
+            return "Enter user name." 
+        except NameError as e:
+            return str(e)
+        except PhoneError as e:
+            return str(e)
     return inner
+
+class PhoneError(Exception):
+    pass
+class NameError(Exception):
+    pass
+
+def validate_phone(phone):
+     if not phone.isdigit() or len(phone) != 10:
+        raise PhoneError("Your phone number is incorrect. Please enter a valid 10-digit phone number.")
+
+def validate_name(name):
+    if not name.isalpha():
+        raise NameError("Invalid name. Please enter a name containing only letters.")
 
 @input_error
 def add_contact(args, contacts):
     name, phone = args
+    validate_name(name)
+    validate_phone(phone)
     contacts[name] = phone
     return "Contact added."
 
@@ -26,6 +44,7 @@ def add_contact(args, contacts):
 def change_contact(args, contacts):
     name, phone = args
     if name in contacts:
+        validate_phone(phone)
         contacts[name] = phone
         return "Contact updated." 
     else:
